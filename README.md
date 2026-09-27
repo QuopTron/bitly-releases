@@ -33,7 +33,7 @@ versión.
 
 - Página de releases: <https://github.com/QuopTron/bitly-releases/releases>
 - API (JSON, sin autenticación): <https://api.github.com/repos/QuopTron/bitly-releases/releases/latest>
-- Sitio oficial: <https://bitly.app>
+- Sitio oficial: <https://bitly-site.pages.dev>
 
 ## Cómo se publica
 
