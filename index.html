@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <base href="/bitly-releases/" />
+
+    <meta charset="UTF-8" />
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+    <meta
+      name="description"
+      content="Bitly — Escucha, descarga y organiza tu música favorita."
+    />
+
+    <!-- iOS / iPadOS: instalar desde Safari (Compartir → Añadir a pantalla de
+         inicio) y abrir en pantalla completa, como la app nativa. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Bitly" />
+    <!-- Apple usa el primero que encuentra y reescala: se declaran los dos
+         tamaños para que el icono de la pantalla de inicio no salga borroso. -->
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/Icon-192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/Icon-512.png" />
+    <meta name="theme-color" content="#0D0D0D" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <!-- `href` relativo: el manifiesto vive en la raíz de la app, así que
+         funciona igual servido en / o en un subdirectorio. -->
+    <link rel="manifest" href="manifest.json" />
+
+    <title>Bitly — Música sin límites</title>
+  </head>
+  <body>
+    <script src="flutter_bootstrap.js" async></script>
+    <script>
+      // Registrar el service worker para la PWA (offline + pantalla de inicio).
+      //
+      // La ruta se resuelve contra <base href> en vez de escribir "/…": servido
+      // en un subdirectorio (o en el dominio que sea) el registro apuntaba a la
+      // raíz del HOST, así que el service worker quedaba fuera del alcance de la
+      // app, Safari/Chrome no la veían instalable y el aviso era "no se pudo
+      // instalar" —justo el error que aparecía al probar en Mac—.
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          const swUrl = new URL("service_worker.js", document.baseURI).href;
+          // `scope` explícito: el SW tiene que controlar TODA la app, incluida
+          // su subruta, no solo la carpeta del archivo.
+          const scope = new URL("./", document.baseURI).href;
+          navigator.serviceWorker
+            .register(swUrl, { scope })
+            .then((reg) =>
+              console.log("[PWA] Service Worker registrado:", reg.scope),
+            )
+            .catch((err) =>
+              console.log("[PWA] Service Worker no registrado:", err),
+            );
+        });
+      }
+    </script>
+  </body>
+</html>
